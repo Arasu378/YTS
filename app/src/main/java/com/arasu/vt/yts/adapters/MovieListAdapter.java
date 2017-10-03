@@ -1,6 +1,9 @@
 package com.arasu.vt.yts.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.pojo.Movy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -46,7 +50,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
             Movy movy=moviesList.get(position);
         String pictureURL=movy.getMediumCoverImage();
         String title=movy.getTitle();
@@ -55,7 +59,24 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
         ye_ar=ye_ar.substring(0, ye_ar.length() - 2);
         holder.year_title.setText(ye_ar);
         if(pictureURL!=null){
-            Picasso.with(mContext).load(pictureURL).into(holder.image_movie);
+            Picasso.with(mContext).load(pictureURL).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    holder.image_movie.setBackground(new BitmapDrawable(bitmap) );
+
+
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            });
         }
         if(title!=null){
             holder.title_movie.setText(title);
