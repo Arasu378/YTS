@@ -141,30 +141,37 @@ public class MainActivity extends AppCompatActivity {
                movieList.clear();
                     try{
                         String returned_response=new Gson().toJson(response.body());
-                        Log.d("value : ",""+returned_response);
-                        String tMvo=String.valueOf(response.body().getData().getMovieCount());
-                        tMvo=tMvo.substring(0,tMvo.length()-2);
-                        String text=tMvo+" YIFY Movies Found";
-                        total_movie_list.setText(text);
-                        double totalmovie=response.body().getData().getMovieCount();
-                        String pageNumber=String .valueOf(response.body().getData().getPageNumber());
-                        double balanceMovie=totalmovie/20;
-                        String finalbalanceMovie=String.valueOf(balanceMovie);
-                        pageNumber=pageNumber.substring(0,pageNumber.length()-2);
-                        finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
-                        String centeredText=pageNumber+" of "+finalbalanceMovie;
-                        textView_total.setText(centeredText);
-                        ArrayList<Movy>mov=response.body().getData().getMovies();
-                        movieList=mov;
-                        adapter=new MovieListAdapter(MainActivity.this,movieList);
-                         StaggeredGridLayoutManager stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+                        String status=response.body().getStatus();
+                        String status_message=response.body().getStatusMessage();
+                        if(status.equals("ok")){
+                            Log.d("value : ",""+returned_response);
+                            String tMvo=String.valueOf(response.body().getData().getMovieCount());
+                            tMvo=tMvo.substring(0,tMvo.length()-2);
+                            String text=tMvo+" YIFY Movies Found";
+                            total_movie_list.setText(text);
+                            double totalmovie=response.body().getData().getMovieCount();
+                            String pageNumber=String .valueOf(response.body().getData().getPageNumber());
+                            double balanceMovie=totalmovie/20;
+                            String finalbalanceMovie=String.valueOf(balanceMovie);
+                            pageNumber=pageNumber.substring(0,pageNumber.length()-2);
+                            finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
+                            String centeredText=pageNumber+" of "+finalbalanceMovie;
+                            textView_total.setText(centeredText);
+                            ArrayList<Movy>mov=response.body().getData().getMovies();
+                            movieList=mov;
+                            adapter=new MovieListAdapter(MainActivity.this,movieList);
+                            StaggeredGridLayoutManager stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
 
-                        final LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
-                        recycler_view_movie.setLayoutManager(stmanager);
-                        recycler_view_movie.setItemAnimator(new DefaultItemAnimator());
-                        recycler_view_movie.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
+                            final LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
+                            recycler_view_movie.setLayoutManager(stmanager);
+                            recycler_view_movie.setItemAnimator(new DefaultItemAnimator());
+                            recycler_view_movie.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
 
+
+                        }else{
+                            Toast.makeText(getApplicationContext(),"Error : "+status_message,Toast.LENGTH_SHORT).show();
+                        }
 
 
                     }catch (Exception e){
