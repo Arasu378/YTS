@@ -38,4 +38,11 @@ public class Data{
     public ArrayList<Movy> getMovies() { return this.movies; }
 
     public void setMovies(ArrayList<Movy> movies) { this.movies = movies; }
+    @SerializedName("movie")
+    @Expose
+    private Movie movie;
+
+    public Movie getMovie() { return this.movie; }
+
+    public void setMovie(Movie movie) { this.movie = movie; }
 }

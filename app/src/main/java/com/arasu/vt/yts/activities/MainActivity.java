@@ -1,7 +1,6 @@
-package com.arasu.vt.yts;
+package com.arasu.vt.yts.activities;
 
 import android.app.ProgressDialog;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,18 +14,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.adapters.MovieListAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.ScrollListenerMovies;
-import com.arasu.vt.yts.model.ScrollListenerPicture;
 import com.arasu.vt.yts.pojo.Movy;
 import com.arasu.vt.yts.pojo.RootObject;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

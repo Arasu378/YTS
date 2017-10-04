@@ -1,6 +1,7 @@
 package com.arasu.vt.yts.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arasu.vt.yts.R;
+import com.arasu.vt.yts.activities.MovieDetailsActivity;
 import com.arasu.vt.yts.pojo.Movy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -51,13 +53,14 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-            Movy movy=moviesList.get(position);
+            final Movy movy=moviesList.get(position);
         String pictureURL=movy.getMediumCoverImage();
         String title=movy.getTitle();
         double year=movy.getYear();
         String ye_ar=String.valueOf(year);
         ye_ar=ye_ar.substring(0, ye_ar.length() - 2);
         holder.year_title.setText(ye_ar);
+        final double movieId=movy.getId();
         if(pictureURL!=null){
             Picasso.with(mContext).load(pictureURL).into(new Target() {
                 @Override
@@ -81,6 +84,14 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
         if(title!=null){
             holder.title_movie.setText(title);
         }
+        holder.card_click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext, MovieDetailsActivity.class);
+                intent.putExtra("movieid",movieId);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
