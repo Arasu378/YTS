@@ -26,6 +26,7 @@
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
             android:text="985.23 MB"
+            android:id="@+id/filesize"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
 
@@ -47,11 +48,12 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/full_screen_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
+            android:id="@+id/resolution_720p"
             android:textColor="@color/text_light_grey"
             android:text="1280*720"
             android:layout_gravity="center"
@@ -75,13 +77,14 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/audio_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
             android:text="English"
+            android:id="@+id/language_720p"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
 
@@ -103,13 +106,14 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/eye_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
             android:text="PG-13"
+            android:id="@+id/mpa_rating_720p"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
 
@@ -125,13 +129,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:id="@+id/subtitle_720p"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/subtitles_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,13 +164,14 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/frame_rate_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
             android:text="23.976 fps"
+            android:id="@+id/fps720"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
 
@@ -187,7 +193,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+            android:src="@drawable/clock_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -195,6 +201,7 @@
             android:textColor="@color/text_light_grey"
             android:text="2hr 13 min"
             android:layout_gravity="center"
+            android:id="@+id/runtime_720p"
             android:layout_marginLeft="25dp"/>
 
     </LinearLayout>
@@ -212,18 +219,16 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/folder_iocon"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
             android:text="P/S 13,89 / 6,550"
+            android:id="@+id/seedsandpeers"
             android:layout_gravity="center"
-            android:layout_marginLeft="25dp"/>
+            android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
     <View

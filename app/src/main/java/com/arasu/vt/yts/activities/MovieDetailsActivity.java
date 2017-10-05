@@ -1,14 +1,19 @@
 package com.arasu.vt.yts.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,10 +34,13 @@ import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.fragments.Fragment1080p;
 import com.arasu.vt.yts.fragments.Fragment720p;
 import com.arasu.vt.yts.interfaces.POJOInterface;
+import com.arasu.vt.yts.model.FragmentModel;
 import com.arasu.vt.yts.pojo.Cast;
 import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.MovieDetailResponse;
+import com.arasu.vt.yts.pojo.Torrent;
 import com.google.android.youtube.player.YouTubeThumbnailView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -44,6 +52,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieDetailsActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_STORAGE = 1;
     private double movieId;
     private String MovieIdString=null;
     private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date;
@@ -59,6 +68,35 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(MovieDetailsActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED&&ContextCompat.checkSelfPermission(MovieDetailsActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MovieDetailsActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)&&ActivityCompat.shouldShowRequestPermissionRationale(MovieDetailsActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(MovieDetailsActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_WRITE_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
         try{
             Bundle bundle=getIntent().getExtras();
             movieId=bundle.getDouble("movieid");
@@ -109,7 +147,46 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
     }
+    private static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
 
+    private static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_WRITE_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(),"Please allow read,write permission for storage",Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
     private void getMovieDetailsMethod(String movieIdString) {
         showDialog();
         POJOInterface apiService= ApiClient.getRetrofit().create(POJOInterface.class);
@@ -245,6 +322,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }
                     });
                     Bundle bundle= new Bundle();
+                    ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+
+                        Gson gson=new Gson();
+                        String torrentzString=gson.toJson(torrentzList);
+                        Log.d("torrentz: ",""+torrentzString);
+                    FragmentModel.getHolder().setTorrentZlist(torrentzString);
+                    String language=response.body().getData().getMovie().getLanguage();
+                    FragmentModel.getHolder().setLanguage(language);
+                    String mpa_rating=response.body().getData().getMovie().getMpaRating();
+                    FragmentModel.getHolder().setMpa_rating(mpa_rating);
+                    int runtime=response.body().getData().getMovie().getRuntime();
+                    FragmentModel.getHolder().setRuntime(runtime);
+
+
                   //  bundle.putString("dealerid",dealerid);
                    // bundle.putString("Time",time);
                     Fragment720p frag=new Fragment720p();
