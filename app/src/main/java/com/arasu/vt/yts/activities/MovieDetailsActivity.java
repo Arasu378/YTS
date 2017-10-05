@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,12 +19,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.adapters.CastAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
+import com.arasu.vt.yts.fragments.Fragment1080p;
+import com.arasu.vt.yts.fragments.Fragment720p;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.pojo.Cast;
 import com.arasu.vt.yts.pojo.Movie;
@@ -240,6 +244,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    Bundle bundle= new Bundle();
+                  //  bundle.putString("dealerid",dealerid);
+                   // bundle.putString("Time",time);
+                    Fragment720p frag=new Fragment720p();
+                    frag.setArguments(bundle);
+                    android.support.v4.app.FragmentTransaction fragmentTrans=
+                            getSupportFragmentManager().beginTransaction();
+                    fragmentTrans.replace(R.id.container,frag);
+
+                    //  fragmentTrans.addToBackStack(null);
+                    fragmentTrans.commit();
+                //    fragmentTrans.detach(frag);
+
 
                 }else{
                     Log.e("Error: ",""+statusMessage);
@@ -261,6 +278,52 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            }
+        });
+        RadioGroup radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
+
+        radioGroup1.check(R.id.picture_720);
+
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+
+                switch (checkedId)
+                {
+                    case R.id.picture_720:
+                        Bundle bundle= new Bundle();
+                      //  bundle.putString("dealerid",dealerid);
+                      //  bundle.putString("Time",time);
+                        Fragment720p frag=new Fragment720p();
+                        frag.setArguments(bundle);
+                        android.support.v4.app.FragmentTransaction fragmentTrans=
+                                getSupportFragmentManager().beginTransaction();
+                        fragmentTrans.replace(R.id.container,frag);
+
+                        //  fragmentTrans.addToBackStack(null);
+                        fragmentTrans.commit();
+                    //    fragmentTrans.detach(frag);
+                        break;
+                    case R.id.picture_1080:
+                        Bundle bundle1= new Bundle();
+                      //  bundle1.putString("dealerid",dealerid);
+                       // bundle1.putString("Time",time);
+                        Fragment1080p fragment=new Fragment1080p();
+                        fragment.setArguments(bundle1);
+                        android.support.v4.app.FragmentTransaction fragmentTransaction=
+                                getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.container,fragment);
+                        // fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                      //  fragmentTransaction.detach(fragment);
+                        break;
+
+                    default:
+                        break;
+                }
             }
         });
     }
