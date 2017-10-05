@@ -44,9 +44,16 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -193,7 +200,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Call<MovieDetailResponse>call=apiService.getMovieDetails(movieIdString,true,true);
         call.enqueue(new Callback<MovieDetailResponse>() {
             @Override
-            public void onResponse(Call<MovieDetailResponse> call, Response<MovieDetailResponse> response) {
+            public void onResponse(Call<MovieDetailResponse> call, final Response<MovieDetailResponse> response) {
                 Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
                 dismissDialog();
                 String status=response.body().getStatus();
@@ -334,6 +341,31 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     FragmentModel.getHolder().setMpa_rating(mpa_rating);
                     int runtime=response.body().getData().getMovie().getRuntime();
                     FragmentModel.getHolder().setRuntime(runtime);
+                    button_720p.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+                            if(torrentzList!=null &&torrentzList.size()!=0){
+                                String url=torrentzList.get(0).getUrl();
+                                download720p(url,response.body().getData().getMovie().getTitle(),720);
+
+                            }
+
+                        }
+
+
+                    });
+                    button_1080p.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+                            if(torrentzList!=null &&torrentzList.size()!=0){
+                                String url=torrentzList.get(1).getUrl();
+                                download720p(url,response.body().getData().getMovie().getTitle(),1080);
+
+                            }
+                        }
+                    });
 
 
                   //  bundle.putString("dealerid",dealerid);
@@ -364,7 +396,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
 
                 try{
-                    Log.e("Errror: ",""+t.getMessage());
+                    Log.e("Error: ",""+t.getMessage());
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -418,6 +450,84 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+    private void download720p(String url, final String title, final int value) {
+        showDialog();
+      POJOInterface apiService= ApiClient.getRetrofit().create(POJOInterface.class);
+        Call<ResponseBody>call=apiService.downloadFile(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dismissDialog();
+                if(response.isSuccessful()){
+                    boolean writtenToDisk=writeResponseBodyToDisk(response.body(),title,value);
+                    Log.d("WriteExternal: ","file download was a success? "+writtenToDisk);
+                }else{
+                    Log.e("Error : ","server contact failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dismissDialog();
+                Log.e("Error : ",""+t.getMessage());
+            }
+        });
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body,String title,int resolution) {
+        try{
+            String picresolution=null;
+            if(resolution==720){
+                picresolution="_720p";
+            }else if(resolution==1080){
+                picresolution="_1080p";
+
+            }
+            File newFolder = new File(Environment.getExternalStorageDirectory(), "YTS");
+            if (!newFolder.exists()) {
+                newFolder.mkdir();
+            }
+            File torrentFile=new File(newFolder,File.separator+title+picresolution+".torrent");
+            InputStream inputStream=null;
+            OutputStream outputStream=null;
+            try{
+                byte[] fileReader=new byte[4096];
+                long fileSize=body.contentLength();
+                long filesSizeDownloaded=0;
+                inputStream=body.byteStream();
+                outputStream=new FileOutputStream(torrentFile);
+                while (true){
+                    int read=inputStream.read(fileReader);
+                    if(read==-1){
+                        break;
+                    }
+                    outputStream.write(fileReader,0,read);
+                    filesSizeDownloaded+=read;
+                    Log.d("TAG","file download: "+filesSizeDownloaded+" of "+fileSize);
+
+                }
+                outputStream.flush();
+                return true;
+            }catch (IOException e){
+                e.printStackTrace();
+            }finally {
+                if(inputStream!=null){
+                    inputStream.close();
+                }
+                if(outputStream!=null){
+                    outputStream.close();
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     private  void watchYoutubeVideo(Context context, String id){
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
