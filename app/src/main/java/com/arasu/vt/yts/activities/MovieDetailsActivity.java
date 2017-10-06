@@ -11,6 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -19,12 +21,14 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,17 +68,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private String MovieIdString=null;
     private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date;
     private ImageView movie_poster,medium_image_1,medium_image_2,medium_image_3;
-    private Button button_720p,button_1080p;
+    private Button button_720p,button_1080p,imdb_chrome;
     private RecyclerView cast_recycler;
     private ProgressDialog progressDialog;
     private CastAdapter adapter;
     private ArrayList<Cast>castList=new ArrayList<Cast>();
     private LinearLayout background_poster_image;
     private YouTubeThumbnailView thumbnail_youtube;
+    private CollapsingToolbarLayout collapsingToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+
+
+     // initCollapsingToolbar();
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(MovieDetailsActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -120,6 +128,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         medium_image_3=(ImageView)findViewById(R.id.medium_image_3);
         button_720p=(Button)findViewById(R.id.button_720p);
         button_1080p=(Button)findViewById(R.id.button_1080p);
+        imdb_chrome=(Button)findViewById(R.id.imdb_chrome);
         cast_recycler=(RecyclerView)findViewById(R.id.cast_recycler);
         movie_title=(TextView)findViewById(R.id.movie_title);
         movie_year=(TextView)findViewById(R.id.movie_year);
@@ -154,6 +163,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
     }
+
+
     private static boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
@@ -201,9 +212,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         call.enqueue(new Callback<MovieDetailResponse>() {
             @Override
             public void onResponse(Call<MovieDetailResponse> call, final Response<MovieDetailResponse> response) {
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
                 dismissDialog();
-                String status=response.body().getStatus();
+                final String status=response.body().getStatus();
                 String statusMessage=response.body().getStatusMessage();
                 if(status.equals("ok")){
                     castList.clear();
@@ -226,9 +236,27 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    final String imdbCode=response.body().getData().getMovie().getImdbCode();
+                    imdb_chrome.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(imdbCode!=null){
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/title/"+imdbCode));
+                                startActivity(browserIntent);
+                            }else{
+                                Toast.makeText(getApplicationContext(),"No pages in IMDB.",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
                     String title=response.body().getData().getMovie().getTitle();
                     if(title!=null){
                         movie_title.setText(title);
+                        try{
+                            collapsingToolbar.setTitle(title);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     String background_image=response.body().getData().getMovie().getBackgroundImage();
                     if(background_image!=null){
@@ -303,6 +331,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     String  medium_screenshot_1=response.body().getData().getMovie().getMediumScreenshotImage1();
                     String medium_screenshot_2=response.body().getData().getMovie().getMediumScreenshotImage2();
                     String medium_screenshot_3=response.body().getData().getMovie().getMediumScreenshotImage3();
+                    String large_screenshot_1=response.body().getData().getMovie().getLargeScreenshotImage1();
+                    String large_screenshot_2=response.body().getData().getMovie().getLargeScreenshotImage2();
+                    String large_screenshot_3=response.body().getData().getMovie().getLargeScreenshotImage3();
+                    ArrayList<String>largePictuelist=new ArrayList<String>();
+                    largePictuelist.add(0,large_screenshot_1);
+                    largePictuelist.add(1,large_screenshot_2);
+                    largePictuelist.add(2,large_screenshot_3);
+                    Gson gSon=new Gson();
+                    String pictureList=gSon.toJson(largePictuelist);
+                    Log.d("MovieDetails",""+pictureList);
+                    FragmentModel.getHolder().setLargePictureList(pictureList);
+
+
                     if(medium_screenshot_1!=null){
                         Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_1).into(medium_image_1);
                     }
@@ -311,7 +352,27 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     } if(medium_screenshot_3!=null){
                         Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_3).into(medium_image_3);
                     }
-
+                        medium_image_1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(MovieDetailsActivity.this,FullScreenActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    medium_image_2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(MovieDetailsActivity.this,FullScreenActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    medium_image_3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(MovieDetailsActivity.this,FullScreenActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     final String youtubeThumbnail=response.body().getData().getMovie().getYtTrailerCode();
                     if(youtubeThumbnail!=null){
                         String finalvalue="https://img.youtube.com/vi/"+youtubeThumbnail+"/hqdefault.jpg";
@@ -379,7 +440,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     //  fragmentTrans.addToBackStack(null);
                     fragmentTrans.commit();
                 //    fragmentTrans.detach(frag);
-
+                        try{
+                            adapter.notifyDataSetChanged();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
 
                 }else{
                     Log.e("Error: ",""+statusMessage);

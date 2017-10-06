@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/text_light_grey"
-                android:text="1.44 GB"
+                android:text="size"
                 android:id="@+id/size_1080p"
                 android:layout_gravity="center"
                 android:layout_marginLeft="25dp"/>
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/text_light_grey"
-                android:text="1980*1080"
+                android:text="resolution"
                 android:id="@+id/pic_resolution"
                 android:layout_gravity="center"
                 android:layout_marginLeft="25dp"/>
@@ -84,7 +84,7 @@
                 android:textSize="12sp"
                 android:id="@+id/language_text"
                 android:textColor="@color/text_light_grey"
-                android:text="English"
+                android:text="language"
                 android:layout_gravity="center"
                 android:layout_marginLeft="25dp"/>
 
@@ -113,7 +113,7 @@
                 android:textSize="12sp"
                 android:id="@+id/mpa_rating_text"
                 android:textColor="@color/text_light_grey"
-                android:text="PG-13"
+                android:text="rating"
                 android:layout_gravity="center"
                 android:layout_marginLeft="25dp"/>
 
@@ -200,7 +200,7 @@
                 android:id="@+id/runtime_text"
                 android:textSize="12sp"
                 android:textColor="@color/text_light_grey"
-                android:text="2hr 13 min"
+                android:text="runtime"
                 android:layout_gravity="center"
                 android:layout_marginLeft="25dp"/>
 
@@ -226,7 +226,7 @@
                 android:textSize="12sp"
                 android:id="@+id/seeds_peers"
                 android:textColor="@color/text_light_grey"
-                android:text="P/S 13,89 / 6,550"
+                android:text="seeds"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"/>
 

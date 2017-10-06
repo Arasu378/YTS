@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
-            android:text="985.23 MB"
+            android:text="size"
             android:id="@+id/filesize"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
@@ -55,7 +55,7 @@
             android:textSize="12sp"
             android:id="@+id/resolution_720p"
             android:textColor="@color/text_light_grey"
-            android:text="1280*720"
+            android:text="resolution"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
 
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
-            android:text="English"
+            android:text="language"
             android:id="@+id/language_720p"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
-            android:text="PG-13"
+            android:text="rating"
             android:id="@+id/mpa_rating_720p"
             android:layout_gravity="center"
             android:layout_marginLeft="25dp"/>
@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
-            android:text="2hr 13 min"
+            android:text="minutes"
             android:layout_gravity="center"
             android:id="@+id/runtime_720p"
             android:layout_marginLeft="25dp"/>
@@ -225,7 +225,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/text_light_grey"
-            android:text="P/S 13,89 / 6,550"
+            android:text="peers"
             android:id="@+id/seedsandpeers"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"/>

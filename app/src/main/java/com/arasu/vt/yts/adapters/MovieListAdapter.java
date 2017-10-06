@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +30,31 @@ import java.util.ArrayList;
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyViewHolder> {
     private Context mContext;
     private ArrayList<Movy>moviesList;
-    public MovieListAdapter(Context mContext,ArrayList<Movy>moviesList){
+    private  int visibleThreshold=5;
+    private int lastVisibleItem,totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListerner;
+    public MovieListAdapter(Context mContext,ArrayList<Movy>moviesList,RecyclerView recyclerView){
         this.mContext=mContext;
         this.moviesList=moviesList;
+       if(recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager){
+           final LinearLayoutManager staggeredGridLayoutManager=(LinearLayoutManager) recyclerView.getLayoutManager();
+           recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+               @Override
+               public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                   super.onScrolled(recyclerView, dx, dy);
+                   totalItemCount=staggeredGridLayoutManager.getItemCount();
+                   lastVisibleItem=staggeredGridLayoutManager.findLastVisibleItemPosition();
+                   if(!loading&&totalItemCount<=(lastVisibleItem+visibleThreshold)){
+                       if(onLoadMoreListerner!=null){
+                           onLoadMoreListerner.onLoadMore();
+                       }
+                       loading=true;
+                   }
+               }
+           });
+       }
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -95,6 +119,18 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
 
     }
 
+   public void setLoad(){
+       loading=false;
+   }
+   public void setOnLoadMoreListerner(OnLoadMoreListener onLoadMoreListerner){
+       this.onLoadMoreListerner=onLoadMoreListerner;
+   }
+   public interface OnLoadMoreListener{
+        void  onLoadMore();
+    }
+    public void setLoaded(){
+        loading=false;
+    }
     @Override
     public int getItemCount() {
         if(moviesList!=null &&moviesList.size()!=0){

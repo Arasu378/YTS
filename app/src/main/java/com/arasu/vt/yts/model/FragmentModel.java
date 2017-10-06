@@ -16,6 +16,7 @@ public class FragmentModel {
     private String size;
     private static final FragmentModel holder=new FragmentModel();
     private String torrentZlist;
+    private String largePictureList;
     public static FragmentModel getHolder(){
         return holder;
     }
@@ -101,5 +102,13 @@ public class FragmentModel {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getLargePictureList() {
+        return largePictureList;
+    }
+
+    public void setLargePictureList(String largePictureList) {
+        this.largePictureList = largePictureList;
     }
 }

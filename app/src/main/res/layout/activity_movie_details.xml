@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="Spider-Man: Homecoming"
+                    android:text="title"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:singleLine="true"
-                    android:text="2017"
+                    android:text="year"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -75,7 +75,7 @@
                         android:layout_width="180dp"
                         android:layout_height="250dp"
                         android:layout_margin="5dp"
-                        android:background="@drawable/medium_cover" />
+                        android:background="@drawable/default_image_icon" />
                 </android.support.v7.widget.CardView>
 
                 <LinearLayout
@@ -100,7 +100,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
-                            android:text="182"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -117,16 +117,29 @@
                             android:layout_height="35dp"
                             android:src="@drawable/imdb_icon" />
 
+
                         <TextView
                             android:id="@+id/movie_imdb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
-                            android:text="92%"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:text="View in IMDB"
+                        android:background="@drawable/text_background"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/imdb_chrome"
+                        android:clickable="true"
+                        android:layout_marginBottom="5dp"
+                        android:layout_height="wrap_content" />
 
                     <Button
                         android:id="@+id/button_720p"
@@ -183,6 +196,7 @@
                             android:layout_width="180dp"
                             android:layout_marginLeft="2dp"
                             android:id="@+id/thumbnail_youtube"
+                            android:src="@drawable/default_image_icon"
                             android:layout_height="120dp">
 
                         </com.google.android.youtube.player.YouTubeThumbnailView>
@@ -192,21 +206,24 @@
                             android:layout_width="180dp"
                             android:layout_marginLeft="8dp"
                             android:layout_height="120dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/default_image_icon"
+                            />
 
                         <ImageView
                             android:layout_width="180dp"
                             android:id="@+id/medium_image_2"
                             android:layout_marginLeft="8dp"
                             android:layout_height="120dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/default_image_icon"
+                            />
 
                         <ImageView
                             android:layout_width="180dp"
                             android:id="@+id/medium_image_3"
                             android:layout_height="120dp"
                             android:layout_marginLeft="8dp"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/default_image_icon"
+                            />
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
@@ -227,7 +244,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:text="gsdsd"
+                android:text="text"
                 android:textColor="@color/light_grey"
                 android:textSize="14sp" />
 
@@ -237,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
-                android:text="Downloaded 25,957 times"
+                android:text="text"
                 android:textColor="@color/light_grey"
                 android:textSize="15sp" />
 
@@ -247,7 +264,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:text="October 03,2017 at 06:01 AM"
+                android:text="time"
                 android:textColor="@color/light_grey"
                 android:textSize="15sp" />
 
