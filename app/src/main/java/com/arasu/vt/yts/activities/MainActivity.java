@@ -216,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
 dismissDialog();
                 Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
                 try{
+                    Log.e("Error: ","arasu YTS : "+t.getMessage());
+                    t.getMessage();
                     t.printStackTrace();
                 }catch (Exception e){
                     e.printStackTrace();
