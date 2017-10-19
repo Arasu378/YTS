@@ -17,11 +17,14 @@ import android.widget.TextView;
 
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.activities.MovieDetailsActivity;
+import com.arasu.vt.yts.clients.ApiClient;
+import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.Movy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kyros on 03-10-2017.
@@ -29,12 +32,12 @@ import java.util.ArrayList;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyViewHolder> {
     private Context mContext;
-    private ArrayList<Movy>moviesList;
+    private List<Movie> moviesList;
     private  int visibleThreshold=5;
     private int lastVisibleItem,totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListerner;
-    public MovieListAdapter(Context mContext,ArrayList<Movy>moviesList,RecyclerView recyclerView){
+    public MovieListAdapter(Context mContext,List<Movie>moviesList,RecyclerView recyclerView){
         this.mContext=mContext;
         this.moviesList=moviesList;
        if(recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager){
@@ -77,7 +80,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-            final Movy movy=moviesList.get(position);
+            final Movie movy=moviesList.get(position);
         String pictureURL=movy.getMediumCoverImage();
         String title=movy.getTitle();
         double year=movy.getYear();
@@ -85,7 +88,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
         ye_ar=ye_ar.substring(0, ye_ar.length() - 2);
         holder.year_title.setText(ye_ar);
         final double movieId=movy.getId();
+
         if(pictureURL!=null){
+            pictureURL=pictureURL.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
             Picasso.with(mContext).load(pictureURL).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

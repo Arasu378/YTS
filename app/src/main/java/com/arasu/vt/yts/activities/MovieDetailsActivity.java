@@ -72,7 +72,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private RecyclerView cast_recycler;
     private ProgressDialog progressDialog;
     private CastAdapter adapter;
-    private ArrayList<Cast>castList=new ArrayList<Cast>();
+    private List<Cast>castList=new ArrayList<Cast>();
     private LinearLayout background_poster_image;
     private YouTubeThumbnailView thumbnail_youtube;
     private CollapsingToolbarLayout collapsingToolbar;
@@ -217,7 +217,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 String statusMessage=response.body().getStatusMessage();
                 if(status.equals("ok")){
                     castList.clear();
-                    String medium_picture=response.body().getData().getMovie().getMediumCoverImage();
+                    String medium_picture=response.body().getData().getMediumCoverImage();
+
                     if(medium_picture!=null){
                         Picasso.with(MovieDetailsActivity.this).load(medium_picture).into(new Target() {
                             @Override
@@ -236,7 +237,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    final String imdbCode=response.body().getData().getMovie().getImdbCode();
+                    final String imdbCode=response.body().getData().getImdbCode();
                     imdb_chrome.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -249,7 +250,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                         }
                     });
-                    String title=response.body().getData().getMovie().getTitle();
+                    String title=response.body().getData().getTitle();
                     if(title!=null){
                         movie_title.setText(title);
                         try{
@@ -258,8 +259,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    String background_image=response.body().getData().getMovie().getBackgroundImage();
+                    String background_image=response.body().getData().getBackgroundImage();
                     if(background_image!=null){
+                        background_image=background_image.replace("https://yts.ag",ApiClient.BASE_URL);
+
                         Picasso.with(MovieDetailsActivity.this).load(background_image).into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -277,12 +280,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    int year=response.body().getData().getMovie().getYear();
+                    String year=response.body().getData().getYear();
                     String years=String.valueOf(year);
                     if(years!=null){
                         movie_year.setText(years);
                     }
-                    ArrayList<String>genres=response.body().getData().getMovie().getGenres();
+                    List<String>genres=response.body().getData().getGenres();
                     StringBuilder builder = new StringBuilder();
                     for(int i=0; i<genres.size();i++){
                         int finalsize=i+1;
@@ -294,29 +297,29 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     }
                     movie_genres.setText(builder.toString());
 
-                    int movieLikes=response.body().getData().getMovie().getLikeCount();
+                    String movieLikes=response.body().getData().getLikeCount();
                     String likes=String.valueOf(movieLikes);
                     if(likes!=null){
                         movie_likes.setText(likes);
                     }
-                    double imdb=response.body().getData().getMovie().getRating();
+                    String imdb=response.body().getData().getRating();
                     String imdbString=String.valueOf(imdb);
                     if(imdbString!=null){
                         movie_imdb.setText(imdbString);
                     }
-                    String movieDescription=response.body().getData().getMovie().getDescriptionFull();
+                    String movieDescription=response.body().getData().getDescriptionFull();
                     if(movieDescription!=null){
                         movie_description.setText(movieDescription);
                     }
-                    int movieDownloadedTimes=response.body().getData().getMovie().getDownloadCount();
+                    String movieDownloadedTimes=response.body().getData().getDownloadCount();
                     String value="Downloaded "+movieDownloadedTimes+" times";
                     movie_downloaded_times.setText(value);
-                    String uploaded=response.body().getData().getMovie().getDateUploaded();
+                    String uploaded=response.body().getData().getDateUploaded();
                     if(uploaded!=null){
                         movie_upload_date.setText(uploaded);
 
                     }
-                    castList=response.body().getData().getMovie().getCast();
+                    castList=response.body().getData().getCast();
                     if(castList!=null && castList.size()!=0){
                         adapter=new CastAdapter(MovieDetailsActivity.this,castList);
                         LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
@@ -328,12 +331,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Cast size is zero! ",Toast.LENGTH_SHORT).show();
 
                     }
-                    String  medium_screenshot_1=response.body().getData().getMovie().getMediumScreenshotImage1();
-                    String medium_screenshot_2=response.body().getData().getMovie().getMediumScreenshotImage2();
-                    String medium_screenshot_3=response.body().getData().getMovie().getMediumScreenshotImage3();
-                    String large_screenshot_1=response.body().getData().getMovie().getLargeScreenshotImage1();
-                    String large_screenshot_2=response.body().getData().getMovie().getLargeScreenshotImage2();
-                    String large_screenshot_3=response.body().getData().getMovie().getLargeScreenshotImage3();
+                    String  medium_screenshot_1=response.body().getData().getMediumScreenshot1Image();
+                    String medium_screenshot_2=response.body().getData().getMediumScreenshot2Image();
+                    String medium_screenshot_3=response.body().getData().getMediumScreenshot3Image();
+                    String large_screenshot_1=response.body().getData().getLargeScreenshot1Image();
+                    String large_screenshot_2=response.body().getData().getLargeScreenshot2Image();
+                    String large_screenshot_3=response.body().getData().getLargeScreenshot3Image();
                     ArrayList<String>largePictuelist=new ArrayList<String>();
                     largePictuelist.add(0,large_screenshot_1);
                     largePictuelist.add(1,large_screenshot_2);
@@ -345,11 +348,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
                     if(medium_screenshot_1!=null){
+                        medium_screenshot_1=medium_screenshot_1.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
+
                         Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_1).into(medium_image_1);
                     }
                     if(medium_screenshot_2!=null){
+                        medium_screenshot_2=medium_screenshot_2.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
+
                         Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_2).into(medium_image_2);
                     } if(medium_screenshot_3!=null){
+                        medium_screenshot_3=medium_screenshot_3.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
+
                         Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_3).into(medium_image_3);
                     }
                         medium_image_1.setOnClickListener(new View.OnClickListener() {
@@ -373,7 +382,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                    final String youtubeThumbnail=response.body().getData().getMovie().getYtTrailerCode();
+                    final String youtubeThumbnail=response.body().getData().getYtTrailerCode();
                     if(youtubeThumbnail!=null){
                         String finalvalue="https://img.youtube.com/vi/"+youtubeThumbnail+"/hqdefault.jpg";
                         Picasso.with(MovieDetailsActivity.this).load(finalvalue).into(thumbnail_youtube);
@@ -390,25 +399,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }
                     });
                     Bundle bundle= new Bundle();
-                    ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+                    List<Torrent>torrentzList=response.body().getData().getTorrents();
 
                         Gson gson=new Gson();
                         String torrentzString=gson.toJson(torrentzList);
                         Log.d("torrentz: ",""+torrentzString);
                     FragmentModel.getHolder().setTorrentZlist(torrentzString);
-                    String language=response.body().getData().getMovie().getLanguage();
+                    String language=response.body().getData().getLanguage();
                     FragmentModel.getHolder().setLanguage(language);
-                    String mpa_rating=response.body().getData().getMovie().getMpaRating();
+                    String mpa_rating=response.body().getData().getMpaRating();
                     FragmentModel.getHolder().setMpa_rating(mpa_rating);
-                    int runtime=response.body().getData().getMovie().getRuntime();
+                    String runtime=response.body().getData().getRuntime();
                     FragmentModel.getHolder().setRuntime(runtime);
                     button_720p.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+                            List<Torrent>torrentzList=response.body().getData().getTorrents();
                             if(torrentzList!=null &&torrentzList.size()!=0){
                                 String url=torrentzList.get(0).getUrl();
-                                download720p(url,response.body().getData().getMovie().getTitle(),720);
+                                download720p(url,response.body().getData().getTitle(),720);
 
                             }
 
@@ -419,10 +428,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     button_1080p.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ArrayList<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
+                            List<Torrent>torrentzList=response.body().getData().getTorrents();
                             if(torrentzList!=null &&torrentzList.size()!=0){
                                 String url=torrentzList.get(1).getUrl();
-                                download720p(url,response.body().getData().getMovie().getTitle(),1080);
+                                download720p(url,response.body().getData().getTitle(),1080);
 
                             }
                         }

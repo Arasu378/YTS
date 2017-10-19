@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasu.vt.yts.R;
+import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.model.FragmentModel;
 import com.arasu.vt.yts.pojo.Torrent;
 import com.google.gson.Gson;
@@ -125,7 +126,7 @@ public class FullScreenActivity extends AppCompatActivity {
             final ImageViewTouch imgDisplay=(ImageViewTouch)view.findViewById(R.id.imgDisplay);
             String picUrl=listPicture.get(position);
             if(picUrl!=null){
-                picUrl=picUrl.replace("yts.ag","yts.unblocked.re");
+                picUrl=picUrl.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
                 showProgressDialog();
                 Picasso.with(getApplicationContext()).load(picUrl).into(imgDisplay, new Callback() {
                     @Override

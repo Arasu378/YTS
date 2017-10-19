@@ -5,7 +5,7 @@ package com.arasu.vt.yts.model;
  */
 
 public class FragmentModel {
-    private int runtime;
+    private String runtime;
     private String language;
     private String mpa_rating;
     private String p720;
@@ -32,11 +32,11 @@ public class FragmentModel {
         this.torrentZlist = torrentZlist;
     }
 
-    public int getRuntime() {
+    public String getRuntime() {
         return runtime;
     }
 
-    public void setRuntime(int runtime) {
+    public void setRuntime(String runtime) {
         this.runtime = runtime;
     }
 

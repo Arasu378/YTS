@@ -27,8 +27,10 @@
         <activity
             android:name=".activities.MovieDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FullScreenActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.FullScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.Testing"></activity>
     </application>
 
 </manifest>

@@ -50,7 +50,7 @@ public class Fragment1080p extends Fragment {
         if(mpa_rating!=null){
             mpa_rating_text.setText(mpa_rating);
         }
-        int  runtime=FragmentModel.getHolder().getRuntime();
+        String  runtime=FragmentModel.getHolder().getRuntime();
         String Rtime=runtime+" minutes.";
         runtime_text.setText(Rtime);
 
@@ -62,29 +62,34 @@ public class Fragment1080p extends Fragment {
             torrentList=gson.fromJson(list,type);
             Log.d("torrentz"," list size "+torrentList.size());
             if(torrentList!=null&&torrentList.size()!=0){
-              String url=torrentList.get(1).getUrl();
-                double peers=torrentList.get(1).getPeers();
-                double seeds=torrentList.get(1).getSeeds();
-                String SEEDS=String.valueOf(seeds);
-                SEEDS=SEEDS.substring(0,SEEDS.length()-2);
-                String PEERS=String.valueOf(peers);
-                PEERS=PEERS.substring(0,PEERS.length()-2);
-                String seedspeer="S/P "+SEEDS+" / "+PEERS;
-                seeds_peers.setText(seedspeer);
-                String size=torrentList.get(1).getSize();
-                if(size!=null){
-                    size_1080p.setText(size);
-                }
-                String quality=torrentList.get(1).getQuality();
-                if(quality!=null&&quality.equals("1080p")){
-                    pic_resolution.setText("1920*1080");
-                }else{
-                    if(quality!=null){
-                        pic_resolution.setText(quality);
-
+                if(torrentList.size()!=1){
+                    String url=torrentList.get(1).getUrl();
+                    double peers=torrentList.get(1).getPeers();
+                    double seeds=torrentList.get(1).getSeeds();
+                    String SEEDS=String.valueOf(seeds);
+                    SEEDS=SEEDS.substring(0,SEEDS.length()-2);
+                    String PEERS=String.valueOf(peers);
+                    PEERS=PEERS.substring(0,PEERS.length()-2);
+                    String seedspeer="S/P "+SEEDS+" / "+PEERS;
+                    seeds_peers.setText(seedspeer);
+                    String size=torrentList.get(1).getSize();
+                    if(size!=null){
+                        size_1080p.setText(size);
                     }
+                    String quality=torrentList.get(1).getQuality();
+                    if(quality!=null&&quality.equals("1080p")){
+                        pic_resolution.setText("1920*1080");
+                    }else{
+                        if(quality!=null){
+                            pic_resolution.setText(quality);
+
+                        }
+                    }
+                    String hash=torrentList.get(1).getHash();
+                }else{
+                    Toast.makeText(getContext(),"No 1080 avaliable",Toast.LENGTH_SHORT).show();
                 }
-                String hash=torrentList.get(1).getHash();
+
             }
             subtitle_linear.setOnClickListener(new View.OnClickListener() {
                 @Override

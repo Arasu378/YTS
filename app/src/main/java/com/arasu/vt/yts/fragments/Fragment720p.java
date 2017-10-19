@@ -47,7 +47,7 @@ public class Fragment720p  extends Fragment{
         if(mpa_rating!=null){
             mpa_rating_720p.setText(mpa_rating);
         }
-        int  runtime=FragmentModel.getHolder().getRuntime();
+        String  runtime=FragmentModel.getHolder().getRuntime();
         String Rtime=runtime+" minutes.";
         runtime_720p.setText(Rtime);
 

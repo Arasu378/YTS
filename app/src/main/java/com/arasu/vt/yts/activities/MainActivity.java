@@ -24,19 +24,21 @@ import com.arasu.vt.yts.adapters.MovieListAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.ScrollListenerMovies;
+import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.Movy;
 import com.arasu.vt.yts.pojo.RootObject;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Movy>movieList=new ArrayList<Movy>();
+    private List<Movie>movieList=new ArrayList<Movie>();
     private MovieListAdapter adapter;
     private RecyclerView recycler_view_movie;
     private SwipeRefreshLayout swipe_id;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private StaggeredGridLayoutManager stmanager;
     private static final String TAG=MainActivity.class.getSimpleName();
     private Handler handler;
+    private int limit=20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         showDialog();
         POJOInterface apiService=
                 ApiClient.getRetrofit().create(POJOInterface.class);
-        Call<RootObject>call=apiService.getMoviesList(page);
+        Call<RootObject>call=apiService.getMoviesList(page,limit);
         call.enqueue(new Callback<RootObject>() {
             @Override
             public void onResponse(Call<RootObject> call, Response<RootObject> response) {
@@ -171,13 +174,19 @@ public class MainActivity extends AppCompatActivity {
                             total_movie_list.setText(text);
                             double totalmovie=response.body().getData().getMovieCount();
                             String pageNumber=String .valueOf(response.body().getData().getPageNumber());
+                            Log.d("PageNumber : ",pageNumber);
                             double balanceMovie=totalmovie/20;
                             String finalbalanceMovie=String.valueOf(balanceMovie);
-                            pageNumber=pageNumber.substring(0,pageNumber.length()-2);
+                            try{
+                                pageNumber=pageNumber.substring(0,pageNumber.length()-2);
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
                             String centeredText=pageNumber+" of "+finalbalanceMovie;
                             textView_total.setText(centeredText);
-                            ArrayList<Movy>mov=response.body().getData().getMovies();
+                            List<Movie> mov=response.body().getData().getMovies();
                             movieList=mov;
                             adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
                             stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);

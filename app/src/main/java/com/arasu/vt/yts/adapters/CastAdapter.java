@@ -10,10 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasu.vt.yts.R;
+import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.pojo.Cast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,8 +25,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder> {
     private Context mContext;
-    private ArrayList<Cast>castList;
-    public CastAdapter(Context mContext, ArrayList<Cast>castList){
+    private List<Cast>castList;
+    public CastAdapter(Context mContext, List<Cast> castList){
         this.mContext=mContext;
         this.castList=castList;
     }
@@ -58,6 +60,8 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
             holder.name_cast.setText(nameText);
         }
         if(image!=null){
+            image=image.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
+
             Picasso.with(mContext).load(image).into(holder.cast_image);
         }
         holder.linear_click.setOnClickListener(new View.OnClickListener() {
