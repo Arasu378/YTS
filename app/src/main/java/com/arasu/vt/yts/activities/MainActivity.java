@@ -11,11 +11,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG=MainActivity.class.getSimpleName();
     private Handler handler;
     private int limit=20;
+    private SearchView image_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         swipe_id=(SwipeRefreshLayout)findViewById(R.id.swipe_id) ;
         recycler_view_movie=(RecyclerView)findViewById(R.id.recycler_view_movie);
+        image_search=(SearchView)findViewById(R.id.image_search);
         recycler_view_movie.setHasFixedSize(true);
         handler=new Handler();
         total_movie_list=(TextView)findViewById(R.id.total_movie_list);
@@ -101,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Searchedcurrentpage++;
                 getMoviesList(Searchedcurrentpage);
+            }
+        });
+        image_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
+    //use yts.pe url also it is working 21-10-2017
     public static final String BASE_URL1="https://yts.unblocked.re/api/v2/";
     public static final String BASE_URL2="https://yts.ag/api/v2/";
     public static final String BASE_URL3="https://yts.unblocked.kim/api/v2/";

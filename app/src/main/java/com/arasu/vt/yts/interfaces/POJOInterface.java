@@ -28,5 +28,7 @@ public interface POJOInterface {
     Call<ParentalResponse>getParentalDetails(@Query("movie_id")String movie_id);
     @GET("movie_suggestions.json")
     Call<MovieSuggestionsResponse>getMovieSuggestions(@Query("movie_id")String movie_id);
+    @GET("list_movies.json")
+    Call<RootObject>getQueryList(@Query("query_term")String query_term);
 
 }
