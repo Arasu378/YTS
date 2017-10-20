@@ -71,7 +71,6 @@ public class MovieSuggesstionsActivity extends AppCompatActivity {
         int mId=Integer.parseInt(movieId);
         Log.d("MovieId : ",movieId);
         Log.d("MovieId integer : ",""+mId);
-        Toast.makeText(getApplicationContext(),"Movie id is : "+movieId,Toast.LENGTH_SHORT).show();
 
         POJOInterface apiService= ApiClient.getRetrofit().create(POJOInterface.class);
         Call<MovieSuggestionsResponse>call=apiService.getMovieSuggestions(movieId);
@@ -94,7 +93,7 @@ public class MovieSuggesstionsActivity extends AppCompatActivity {
                     }
 
                 }else{
-                    Toast.makeText(getApplicationContext(),"Error : "+status_message,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Message : "+status_message,Toast.LENGTH_SHORT).show();
                 }
 
             }
