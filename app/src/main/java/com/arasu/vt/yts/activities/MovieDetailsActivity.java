@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -78,6 +80,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private LinearLayout background_poster_image;
     private YouTubeThumbnailView thumbnail_youtube;
     private String movieTitle=null;
+    private AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,20 +146,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         parental_guide_text=(TextView)findViewById(R.id.parental_guide_text);
 
         getMovieDetailsMethod(MovieIdString);
-        button_720p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"button_720p",Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        button_1080p.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(),"button_1080p",Toast.LENGTH_SHORT).show();
-
-                    }
-                });
         thumbnail_youtube.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -549,6 +539,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 dismissDialog();
                 if(response.isSuccessful()){
                     boolean writtenToDisk=writeResponseBodyToDisk(response.body(),title,value);
+                    if(writtenToDisk){
+                        openFolder();
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Movie not downloaded!",Toast.LENGTH_SHORT).show();
+                    }
                     Log.d("WriteExternal: ","file download was a success? "+writtenToDisk);
                 }else{
                     Log.e("Error : ","server contact failed");
@@ -561,6 +557,43 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Log.e("Error : ",""+t.getMessage());
             }
         });
+    }
+
+    private void openFolder() {
+        AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Do you want to open the folder ?");
+        alertDialogBuilder.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/YTS/");
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(selectedUri, "resource/folder");
+
+                if (intent.resolveActivityInfo(getPackageManager(), 0) != null){
+                    startActivity(intent);
+                }
+                else{
+                    Log.d("Url : ",""+selectedUri.toString());
+                    Toast.makeText(getApplicationContext(),"There is no folder!",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+alertDialog=alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
+    private void dismissAlertDialog(){
+        if(alertDialog!=null && alertDialog.isShowing()){
+            alertDialog.dismiss();
+        }
     }
 
     private boolean writeResponseBodyToDisk(ResponseBody body,String title,int resolution) {
@@ -653,12 +686,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dismissDialog();
+        dismissAlertDialog();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         dismissDialog();
+        dismissAlertDialog();
     }
 
 }
