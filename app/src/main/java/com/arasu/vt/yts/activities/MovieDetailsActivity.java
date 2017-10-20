@@ -70,7 +70,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_STORAGE = 1;
     private double movieId;
     private String MovieIdString=null;
-    private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date,parental_guide_text;
+    private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date,parental_guide_text,movie_suggestion_text;
     private ImageView movie_poster,medium_image_1,medium_image_2,medium_image_3;
     private Button button_720p,button_1080p,imdb_chrome;
     private RecyclerView cast_recycler;
@@ -121,6 +121,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             Bundle bundle=getIntent().getExtras();
             movieId=bundle.getDouble("movieid");
             MovieIdString=String.valueOf(movieId);
+            Log.d("MovieIdString: ",MovieIdString);
+
             MovieIdString=MovieIdString.substring(0,MovieIdString.length()-2);
         }catch (Exception e){
             e.printStackTrace();
@@ -144,6 +146,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie_downloaded_times=(TextView)findViewById(R.id.movie_downloaded_times);
         movie_upload_date=(TextView)findViewById(R.id.movie_upload_date);
         parental_guide_text=(TextView)findViewById(R.id.parental_guide_text);
+        movie_suggestion_text=(TextView)findViewById(R.id.movie_suggestion_text);
 
         getMovieDetailsMethod(MovieIdString);
 
@@ -159,6 +162,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Intent intent=new Intent(MovieDetailsActivity.this,ParentalGuideActivity.class);
                 intent.putExtra("movieid",movieId);
                 intent.putExtra("title",movieTitle);
+                startActivity(intent);
+
+            }
+        });
+        movie_suggestion_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MovieId original : ",""+movieId);
+                Intent intent=new Intent(MovieDetailsActivity.this,MovieSuggesstionsActivity.class);
+                intent.putExtra("movieid",MovieIdString);
                 startActivity(intent);
 
             }

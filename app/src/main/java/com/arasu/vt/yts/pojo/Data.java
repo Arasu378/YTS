@@ -131,6 +131,29 @@ public class Data {
     @Expose
     private String dateUploadedUnix;
 
+    @SerializedName("movie_suggestions_count")
+    @Expose
+    private int movie_suggestions_count;
+    @SerializedName("movie_suggestions")
+    @Expose
+    private List<Movie> movie_suggestions;
+
+    public int getMovie_suggestions_count() {
+        return movie_suggestions_count;
+    }
+
+    public void setMovie_suggestions_count(int movie_suggestions_count) {
+        this.movie_suggestions_count = movie_suggestions_count;
+    }
+
+    public List<Movie> getMovie_suggestions() {
+        return movie_suggestions;
+    }
+
+    public void setMovie_suggestions(List<Movie> movie_suggestions) {
+        this.movie_suggestions = movie_suggestions;
+    }
+
     public int getParental_guide_count() {
         return parental_guide_count;
     }

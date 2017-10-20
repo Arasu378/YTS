@@ -1,6 +1,7 @@
 package com.arasu.vt.yts.interfaces;
 
 import com.arasu.vt.yts.pojo.MovieDetailResponse;
+import com.arasu.vt.yts.pojo.MovieSuggestionsResponse;
 import com.arasu.vt.yts.pojo.ParentalResponse;
 import com.arasu.vt.yts.pojo.RootObject;
 
@@ -25,5 +26,7 @@ public interface POJOInterface {
     Call<ResponseBody>downloadFile(@Url String url);
     @GET("movie_parental_guides.json")
     Call<ParentalResponse>getParentalDetails(@Query("movie_id")String movie_id);
+    @GET("movie_suggestions.json")
+    Call<MovieSuggestionsResponse>getMovieSuggestions(@Query("movie_id")String movie_id);
 
 }

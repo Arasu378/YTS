@@ -257,6 +257,16 @@
                 android:textAllCaps="false"
                 android:textColor="@color/green"
                 android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Movie Suggestions"
+                android:textSize="16sp"
+                android:id="@+id/movie_suggestion_text"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                android:layout_marginLeft="10dp"/>
 
             <TextView
                 android:id="@+id/movie_downloaded_times"

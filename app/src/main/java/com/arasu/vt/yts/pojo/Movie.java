@@ -30,7 +30,7 @@ public class Movie {
     private Integer year;
     @SerializedName("rating")
     @Expose
-    private Integer rating;
+    private String rating;
     @SerializedName("runtime")
     @Expose
     private Integer runtime;
@@ -121,11 +121,11 @@ public class Movie {
         this.year = year;
     }
 
-    public Integer getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
