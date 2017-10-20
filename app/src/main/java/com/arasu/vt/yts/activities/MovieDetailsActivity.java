@@ -1,6 +1,7 @@
 package com.arasu.vt.yts.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -66,7 +68,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_WRITE_STORAGE = 1;
     private double movieId;
     private String MovieIdString=null;
-    private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date;
+    private TextView movie_title,movie_year,movie_genres,movie_likes,movie_imdb,movie_description,movie_downloaded_times,movie_upload_date,parental_guide_text;
     private ImageView movie_poster,medium_image_1,medium_image_2,medium_image_3;
     private Button button_720p,button_1080p,imdb_chrome;
     private RecyclerView cast_recycler;
@@ -75,7 +77,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private List<Cast>castList=new ArrayList<Cast>();
     private LinearLayout background_poster_image;
     private YouTubeThumbnailView thumbnail_youtube;
-    private CollapsingToolbarLayout collapsingToolbar;
+    private String movieTitle=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +140,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie_description=(TextView)findViewById(R.id.movie_description);
         movie_downloaded_times=(TextView)findViewById(R.id.movie_downloaded_times);
         movie_upload_date=(TextView)findViewById(R.id.movie_upload_date);
+        parental_guide_text=(TextView)findViewById(R.id.parental_guide_text);
+
         getMovieDetailsMethod(MovieIdString);
         button_720p.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,10 +163,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             }
         });
+        parental_guide_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MovieDetailsActivity.this,ParentalGuideActivity.class);
+                intent.putExtra("movieid",movieId);
+                intent.putExtra("title",movieTitle);
+                startActivity(intent);
 
+            }
+        });
 
 
     }
+
+
 
 
     private static boolean isExternalStorageReadOnly() {
@@ -251,13 +266,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }
                     });
                     String title=response.body().getData().getTitle();
+                    movieTitle=title;
                     if(title!=null){
                         movie_title.setText(title);
-                        try{
-                            collapsingToolbar.setTitle(title);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+
                     }
                     String background_image=response.body().getData().getBackgroundImage();
                     if(background_image!=null){

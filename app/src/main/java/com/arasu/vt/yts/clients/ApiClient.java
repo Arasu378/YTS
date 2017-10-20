@@ -22,7 +22,7 @@ public class ApiClient {
     public static final String BASE_URL3="https://yts.unblocked.kim/api/v2/";
     public static final String BASE_URL4="https://yts.immunicity.kim/api/v2/";
     public static final String BASE_URL5="https://yts.bypassed.kim/api/v2/";
-    public static final String CONSTANT_IMAGE_URL="https://myjson-proxy.herokuapp.com";
+    public static final String CONSTANT_IMAGE_URL="http://www.yifytorrent.xyz";
     public static final String BASE_URL="https://myjson-proxy.herokuapp.com/api/v2/";
     public static final String BASE_URL6="http://yify.is/api/v2/";
     public static final String END_URL="http://www.yifytorrent.xyz/api/v2/";

@@ -20,6 +20,9 @@ public class Data {
     @Expose
     private List<Movie> movies = null;
 
+    @SerializedName("parental_guide_count")
+    @Expose
+    private int parental_guide_count;
 
     @SerializedName("id")
     @Expose
@@ -117,12 +120,24 @@ public class Data {
     @SerializedName("torrents")
     @Expose
     private List<Torrent> torrents = null;
+    @SerializedName("parental_guides")
+    @Expose
+    private List<ParentalGuides> parental_guides=null;
+
     @SerializedName("date_uploaded")
     @Expose
     private String dateUploaded;
     @SerializedName("date_uploaded_unix")
     @Expose
     private String dateUploadedUnix;
+
+    public int getParental_guide_count() {
+        return parental_guide_count;
+    }
+
+    public void setParental_guide_count(int parental_guide_count) {
+        this.parental_guide_count = parental_guide_count;
+    }
 
     public String getId() {
         return id;
@@ -142,6 +157,14 @@ public class Data {
 
     public String getImdbCode() {
         return imdbCode;
+    }
+
+    public List<ParentalGuides> getParental_guides() {
+        return parental_guides;
+    }
+
+    public void setParental_guides(List<ParentalGuides> parental_guides) {
+        this.parental_guides = parental_guides;
     }
 
     public void setImdbCode(String imdbCode) {

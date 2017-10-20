@@ -247,13 +247,23 @@
                 android:text="text"
                 android:textColor="@color/light_grey"
                 android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Parental Guide"
+                android:textSize="17sp"
+                android:id="@+id/parental_guide_text"
+                android:textAllCaps="false"
+                android:textColor="@color/green"
+                android:layout_marginLeft="10dp"/>
 
             <TextView
                 android:id="@+id/movie_downloaded_times"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:text="text"
                 android:textColor="@color/light_grey"
                 android:textSize="15sp" />
