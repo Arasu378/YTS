@@ -1,19 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.arasu.vt.yts.MainActivity">
+    android:background="@color/light_black"
+    tools:context="com.arasu.vt.yts.activities.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/tv_edit"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:text="yify movies"
+            android:gravity="center"
+            android:id="@+id/total_movie_list"
+            android:layout_height="wrap_content" />
+            <android.support.v7.widget.SearchView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                style="@style/SearchViewStyle"
 
-</android.support.constraint.ConstraintLayout>
+                android:id="@+id/image_search"
+                android:layout_marginRight="15dp"
+             />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="30dp"
+               android:text="Previous"
+               android:background="@drawable/text_background"
+               android:textColor="@color/white"
+               android:textSize="14sp"
+               android:textAllCaps="false"
+               android:id="@+id/textView_previous"
+               android:clickable="true"
+               android:layout_marginEnd="10dp"
+               android:layout_alignParentTop="true"
+               android:layout_toStartOf="@+id/textView_total" />
+            <Button
+                android:layout_width="wrap_content"
+                android:text="text"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:clickable="true"
+                android:background="@drawable/text_background"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/textView_total" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:clickable="true"
+                android:textAllCaps="false"
+                android:id="@+id/textView_next"
+                android:background="@drawable/text_background"
+                android:layout_marginStart="11dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/textView_total" />
+
+
+        </RelativeLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/swipe_id">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_margin="5dp"
+            android:nestedScrollingEnabled="false"
+            android:id="@+id/recycler_view_movie">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>
+    </ScrollView>
+
+
+
+
+</LinearLayout>

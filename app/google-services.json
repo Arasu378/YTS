@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "456915939288",
+    "firebase_url": "https://yts-project-8d71c.firebaseio.com",
+    "project_id": "yts-project-8d71c",
+    "storage_bucket": "yts-project-8d71c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456915939288:android:9612516cb56a43b3",
+        "android_client_info": {
+          "package_name": "com.arasu.vt.yts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456915939288-reip8klucodhs69ob7uutm70fdk6plnn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLnLa_J2db1EuIAkp9lbsrflD4TOrSgIc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
