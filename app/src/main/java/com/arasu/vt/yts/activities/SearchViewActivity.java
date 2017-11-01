@@ -110,7 +110,7 @@ public class SearchViewActivity extends AppCompatActivity {
     private void queryText(String query,int page,String  value){
         Log.d("Query : ",""+query);
         showDialog();
-        Toast.makeText(getApplicationContext(),"Value "+value,Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(),"Value "+value,Toast.LENGTH_SHORT).show();
         POJOInterface apiClient= ApiClient.getRetrofit().create(POJOInterface.class);
         Call<RootObject> call=apiClient.getQueryList(query,page);
         call.enqueue(new Callback<RootObject>() {
