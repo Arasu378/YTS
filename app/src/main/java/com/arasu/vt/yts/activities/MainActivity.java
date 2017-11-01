@@ -1,6 +1,7 @@
 package com.arasu.vt.yts.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -132,7 +133,9 @@ public class MainActivity extends AppCompatActivity {
         image_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                queryText(query);
+                Intent intent=new Intent(MainActivity.this,SearchViewActivity.class);
+                intent.putExtra("query",query);
+                startActivity(intent);
                 return true;
             }
 
@@ -148,45 +151,7 @@ public class MainActivity extends AppCompatActivity {
         recycler_view_movie.setAdapter(adapter);
 
     }
-    private void queryText(String query){
-        Log.d("Query : ",""+query);
-        showDialog();
-        POJOInterface apiClient= ApiClient.getRetrofit().create(POJOInterface.class);
-        Call<RootObject>call=apiClient.getQueryList(query);
-        call.enqueue(new Callback<RootObject>() {
-            @Override
-            public void onResponse(Call<RootObject> call, Response<RootObject> response) {
-                dismissDialog();
-                movieList.clear();
-                List<Movie> mov=response.body().getData().getMovies();
-                if(mov!=null&&mov.size()!=0){
-                    movieList.addAll(mov);
 
-                }else{
-                    Toast.makeText(getApplicationContext(),"No Movie found!",Toast.LENGTH_SHORT).show();
-                }
-                Log.d("Query ","Response : "+response.body().toString()+" / "+movieList.size());
-
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<RootObject> call, Throwable t) {
-                dismissDialog();
-                Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
-                try{
-                    Log.e("Error: ","arasu YTS : "+t.getMessage());
-                    t.getMessage();
-                    t.printStackTrace();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-    }
 
 
     private void showDialog(){
