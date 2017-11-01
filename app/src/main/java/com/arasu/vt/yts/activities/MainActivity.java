@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.adapters.MovieListAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
+import com.arasu.vt.yts.clients.EndlessRecyclerViewScrollListener;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.ScrollListenerMovies;
 import com.arasu.vt.yts.pojo.Movie;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private int limit=20;
     private SearchView image_search;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,14 @@ public class MainActivity extends AppCompatActivity {
         swipe_id=(SwipeRefreshLayout)findViewById(R.id.swipe_id) ;
         recycler_view_movie=(RecyclerView)findViewById(R.id.recycler_view_movie);
         image_search=(SearchView)findViewById(R.id.image_search);
-        recycler_view_movie.setHasFixedSize(true);
+       // recycler_view_movie.setHasFixedSize(true);
         handler=new Handler();
         total_movie_list=(TextView)findViewById(R.id.total_movie_list);
         textView_next=(Button)findViewById(R.id.textView_next);
         textView_total=(Button)findViewById(R.id.textView_total);
         textView_previous=(Button)findViewById(R.id.textView_previous);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+      //  RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recycler_view_movie.setHasFixedSize(true);
         recycler_view_movie.setItemViewCacheSize(20);
         recycler_view_movie.setDrawingCacheEnabled(true);
@@ -77,8 +80,24 @@ public class MainActivity extends AppCompatActivity {
         recycler_view_movie.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
 
         recycler_view_movie.setItemAnimator(new DefaultItemAnimator());
-        getMoviesList(Searchedcurrentpage);
 
+        getMoviesList(Searchedcurrentpage);
+        stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                page=page+Searchedcurrentpage;
+                getMoviesList(page);
+            }
+        };
+        recycler_view_movie.addOnScrollListener(scrollListener);
+        adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
+
+        recycler_view_movie.setAdapter(adapter);
 
         swipe_id.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
 
@@ -156,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMoviesList(int page) {
+        Log.d("Page No : ",""+page);
         showDialog();
         POJOInterface apiService=
                 ApiClient.getRetrofit().create(POJOInterface.class);
@@ -171,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     textView_previous.setVisibility(View.VISIBLE);
                 }
-               movieList.clear();
+              // movieList.clear();
                     try{
                         String returned_response=new Gson().toJson(response.body());
                         String status=response.body().getStatus();
@@ -197,12 +217,8 @@ public class MainActivity extends AppCompatActivity {
                             String centeredText=pageNumber+" of "+finalbalanceMovie;
                             textView_total.setText(centeredText);
                             List<Movie> mov=response.body().getData().getMovies();
-                            movieList=mov;
-                            adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
-                            stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-                            GridLayoutManager mGridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                            movieList.addAll(mov);
 
-                            recycler_view_movie.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             Log.d("Movie : ","Movie size : "+movieList.size());
                             adapter.setOnLoadMoreListerner(new MovieListAdapter.OnLoadMoreListener() {
