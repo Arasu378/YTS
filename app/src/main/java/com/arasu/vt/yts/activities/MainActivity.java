@@ -31,6 +31,7 @@ import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.Movy;
 import com.arasu.vt.yts.pojo.RootObject;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
+import com.google.android.gms.common.api.Api;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ScrollListenerMovies listenerMovies;
     private  TextView total_movie_list;
-    private Button textView_previous,textView_total,textView_next;
+ //  private Button textView_total;
     private StaggeredGridLayoutManager stmanager;
     private static final String TAG=MainActivity.class.getSimpleName();
     private Handler handler;
@@ -67,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
        // recycler_view_movie.setHasFixedSize(true);
         handler=new Handler();
         total_movie_list=(TextView)findViewById(R.id.total_movie_list);
-        textView_next=(Button)findViewById(R.id.textView_next);
-        textView_total=(Button)findViewById(R.id.textView_total);
-        textView_previous=(Button)findViewById(R.id.textView_previous);
+   //     textView_next=(Button)findViewById(R.id.textView_next);
+      //  textView_total=(Button)findViewById(R.id.textView_total);
+     //   textView_previous=(Button)findViewById(R.id.textView_previous);
       //  RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         GridLayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recycler_view_movie.setHasFixedSize(true);
@@ -94,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 getMoviesList(page);
             }
         };
-        recycler_view_movie.addOnScrollListener(scrollListener);
-        adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
-
-        recycler_view_movie.setAdapter(adapter);
 
         swipe_id.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
 
@@ -107,32 +104,87 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if(Searchedcurrentpage==1){
-            textView_previous.setVisibility(View.GONE);
-        }else{
-            textView_previous.setVisibility(View.VISIBLE);
-        }
-        textView_previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Searchedcurrentpage--;
-                getMoviesList(Searchedcurrentpage);
-            }
-        });
-        textView_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Searchedcurrentpage++;
-                getMoviesList(Searchedcurrentpage);
-            }
-        });
+//        if(Searchedcurrentpage==1){
+//            textView_previous.setVisibility(View.GONE);
+//        }else{
+//            textView_previous.setVisibility(View.VISIBLE);
+//        }
+//        textView_previous.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Searchedcurrentpage--;
+//                getMoviesList(Searchedcurrentpage);
+//            }
+//        });
+//        textView_next.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Searchedcurrentpage++;
+//                getMoviesList(Searchedcurrentpage);
+//            }
+//        });
         image_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
+        image_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                queryText(query);
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+             //   queryText(newText);
+                return true;
+            }
+        });
+        recycler_view_movie.addOnScrollListener(scrollListener);
+        adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
+
+        recycler_view_movie.setAdapter(adapter);
+
+    }
+    private void queryText(String query){
+        Log.d("Query : ",""+query);
+        showDialog();
+        POJOInterface apiClient= ApiClient.getRetrofit().create(POJOInterface.class);
+        Call<RootObject>call=apiClient.getQueryList(query);
+        call.enqueue(new Callback<RootObject>() {
+            @Override
+            public void onResponse(Call<RootObject> call, Response<RootObject> response) {
+                dismissDialog();
+                movieList.clear();
+                List<Movie> mov=response.body().getData().getMovies();
+                if(mov!=null&&mov.size()!=0){
+                    movieList.addAll(mov);
+
+                }else{
+                    Toast.makeText(getApplicationContext(),"No Movie found!",Toast.LENGTH_SHORT).show();
+                }
+                Log.d("Query ","Response : "+response.body().toString()+" / "+movieList.size());
+
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<RootObject> call, Throwable t) {
+                dismissDialog();
+                Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
+                try{
+                    Log.e("Error: ","arasu YTS : "+t.getMessage());
+                    t.getMessage();
+                    t.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
     }
 
@@ -186,11 +238,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
                 dismissDialog();
                 swipe_id.setRefreshing(false);
-                if(Searchedcurrentpage==1){
-                    textView_previous.setVisibility(View.GONE);
-                }else{
-                    textView_previous.setVisibility(View.VISIBLE);
-                }
+//                if(Searchedcurrentpage==1){
+//                    textView_previous.setVisibility(View.GONE);
+//                }else{
+//                    textView_previous.setVisibility(View.VISIBLE);
+//                }
               // movieList.clear();
                     try{
                         String returned_response=new Gson().toJson(response.body());
@@ -215,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
                             String centeredText=pageNumber+" of "+finalbalanceMovie;
-                            textView_total.setText(centeredText);
+                         //   textView_total.setText(centeredText);
                             List<Movie> mov=response.body().getData().getMovies();
                             movieList.addAll(mov);
 
