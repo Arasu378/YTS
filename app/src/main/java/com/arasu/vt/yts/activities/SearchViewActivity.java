@@ -102,7 +102,7 @@ public class SearchViewActivity extends AppCompatActivity {
 //                queryText(searchString,page,"Load More");
 //            }
 //        };
-        search_recycler.addOnScrollListener(scrollListener);
+        //search_recycler.addOnScrollListener(scrollListener);
         adapter=new MovieListAdapter(SearchViewActivity.this,movieList,search_recycler);
 
         search_recycler.setAdapter(adapter);
