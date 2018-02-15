@@ -1,6 +1,8 @@
 package com.arasu.vt.yts.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arasu.vt.yts.R;
-import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.pojo.Cast;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -60,14 +60,14 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
             holder.name_cast.setText(nameText);
         }
         if(image!=null){
-            image=image.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
+            //image=image.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
 
             Picasso.with(mContext).load(image).into(holder.cast_image);
         }
         holder.linear_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext.getApplicationContext(),"IMDB : "+imdb_code,Toast.LENGTH_SHORT).show();
+                openImdb(imdb_code);
             }
         });
 
@@ -80,6 +80,14 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
         }else{
             return 0;
 
+        }
+    }
+    private void openImdb(String imdbI){
+        if(imdbI!=null){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/title/"+imdbI));
+            mContext.startActivity(browserIntent);
+        }else{
+            Toast.makeText(mContext,"No pages in IMDB.",Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -12,27 +12,20 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +37,6 @@ import com.arasu.vt.yts.fragments.Fragment720p;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.FragmentModel;
 import com.arasu.vt.yts.pojo.Cast;
-import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.MovieDetailResponse;
 import com.arasu.vt.yts.pojo.Torrent;
 import com.google.android.youtube.player.YouTubeThumbnailView;
@@ -53,7 +45,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -259,12 +250,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     imdb_chrome.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(imdbCode!=null){
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/title/"+imdbCode));
-                                startActivity(browserIntent);
-                            }else{
-                                Toast.makeText(getApplicationContext(),"No pages in IMDB.",Toast.LENGTH_SHORT).show();
-                            }
+                            openImdb(imdbCode);
 
                         }
                     });
@@ -276,24 +262,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     }
                     String background_image=response.body().getData().getBackgroundImage();
                     if(background_image!=null){
-                        background_image=background_image.replace("https://yts.ag",ApiClient.BASE_URL);
+                       // background_image=background_image.replace("https://yts.ag",ApiClient.BASE_URL);
 
-                        Picasso.with(MovieDetailsActivity.this).load(background_image).into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                             //   background_poster_image.setBackground(new BitmapDrawable(bitmap));
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
+//                        Picasso.with(MovieDetailsActivity.this).load(background_image).into(new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                             //   background_poster_image.setBackground(new BitmapDrawable(bitmap));
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Drawable errorDrawable) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//                            }
+//                        });
                     }
                     String year=response.body().getData().getYear();
                     String years=String.valueOf(year);
@@ -708,5 +694,12 @@ alertDialog=alertDialogBuilder.create();
         dismissDialog();
         dismissAlertDialog();
     }
-
+    private void openImdb(String imdbI){
+        if(imdbI!=null){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/title/"+imdbI));
+            startActivity(browserIntent);
+        }else{
+            Toast.makeText(getApplicationContext(),"No pages in IMDB.",Toast.LENGTH_SHORT).show();
+        }
+    }
 }
