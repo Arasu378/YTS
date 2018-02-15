@@ -84,7 +84,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
     }
     private void openImdb(String imdbI){
         if(imdbI!=null){
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/title/"+imdbI));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/name/"+imdbI));
             mContext.startActivity(browserIntent);
         }else{
             Toast.makeText(mContext,"No pages in IMDB.",Toast.LENGTH_SHORT).show();
