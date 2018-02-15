@@ -281,7 +281,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         Picasso.with(MovieDetailsActivity.this).load(background_image).into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                background_poster_image.setBackground(new BitmapDrawable(bitmap));
+                             //   background_poster_image.setBackground(new BitmapDrawable(bitmap));
                             }
 
                             @Override

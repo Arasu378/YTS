@@ -15,80 +15,86 @@
         android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="100"
+            android:background="@color/light_dark"
             android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:textColor="@color/green"
+            android:layout_marginLeft="15dp"
             android:textSize="16sp"
             android:layout_gravity="center"
-            android:text="yify movies"
+            android:text="yify movies found"
+            android:layout_weight="50"
             android:gravity="center"
             android:id="@+id/total_movie_list"
             android:layout_height="wrap_content" />
             <android.support.v7.widget.SearchView
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
                 style="@style/SearchViewStyle"
-
+                android:gravity="center"
+                android:layout_weight="50"
+                android:layout_gravity="center"
                 android:id="@+id/image_search"
                 android:layout_marginRight="15dp"
              />
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-           <Button
-               android:layout_width="wrap_content"
-               android:layout_height="30dp"
-               android:text="Previous"
-               android:background="@drawable/text_background"
-               android:textColor="@color/white"
-               android:textSize="14sp"
-               android:textAllCaps="false"
-               android:id="@+id/textView_previous"
-               android:clickable="true"
-               android:layout_marginEnd="10dp"
-               android:layout_alignParentTop="true"
-               android:layout_toStartOf="@+id/textView_total" />
-            <Button
-                android:layout_width="wrap_content"
-                android:text="text"
-                android:textSize="14sp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:clickable="true"
-                android:background="@drawable/text_background"
-                android:layout_height="30dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/textView_total" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="Next"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:clickable="true"
-                android:textAllCaps="false"
-                android:id="@+id/textView_next"
-                android:background="@drawable/text_background"
-                android:layout_marginStart="11dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView_total" />
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:orientation="horizontal">-->
+           <!--&lt;!&ndash;<Button&ndash;&gt;-->
+               <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:layout_height="30dp"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:text="Previous"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:background="@drawable/text_background"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:textSize="14sp"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:textAllCaps="false"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:id="@+id/textView_previous"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:clickable="true"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:layout_marginEnd="10dp"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+               <!--&lt;!&ndash;android:layout_toStartOf="@+id/textView_total" />&ndash;&gt;-->
+            <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="text"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:clickable="true"-->
+                <!--android:background="@drawable/text_background"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:id="@+id/textView_total" />-->
+            <!--&lt;!&ndash;<Button&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="30dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="Next"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textSize="14sp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:clickable="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textAllCaps="false"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/textView_next"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:background="@drawable/text_background"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginStart="11dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_toEndOf="@+id/textView_total" />&ndash;&gt;-->
 
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
+
             android:layout_margin="5dp"
             android:nestedScrollingEnabled="false"
             android:id="@+id/recycler_view_movie">

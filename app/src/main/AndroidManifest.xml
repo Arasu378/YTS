@@ -47,7 +47,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".activities.MovieSuggesstionsActivity"
+        <activity
+            android:name=".activities.MovieSuggesstionsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.SearchViewActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -1,6 +1,7 @@
 package com.arasu.vt.yts.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -24,12 +25,14 @@ import android.widget.Toast;
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.adapters.MovieListAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
+import com.arasu.vt.yts.clients.EndlessRecyclerViewScrollListener;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.ScrollListenerMovies;
 import com.arasu.vt.yts.pojo.Movie;
 import com.arasu.vt.yts.pojo.Movy;
 import com.arasu.vt.yts.pojo.RootObject;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
+import com.google.android.gms.common.api.Api;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -48,12 +51,13 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ScrollListenerMovies listenerMovies;
     private  TextView total_movie_list;
-    private Button textView_previous,textView_total,textView_next;
+ //  private Button textView_total;
     private StaggeredGridLayoutManager stmanager;
     private static final String TAG=MainActivity.class.getSimpleName();
     private Handler handler;
     private int limit=20;
     private SearchView image_search;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +66,14 @@ public class MainActivity extends AppCompatActivity {
         swipe_id=(SwipeRefreshLayout)findViewById(R.id.swipe_id) ;
         recycler_view_movie=(RecyclerView)findViewById(R.id.recycler_view_movie);
         image_search=(SearchView)findViewById(R.id.image_search);
-        recycler_view_movie.setHasFixedSize(true);
+       // recycler_view_movie.setHasFixedSize(true);
         handler=new Handler();
         total_movie_list=(TextView)findViewById(R.id.total_movie_list);
-        textView_next=(Button)findViewById(R.id.textView_next);
-        textView_total=(Button)findViewById(R.id.textView_total);
-        textView_previous=(Button)findViewById(R.id.textView_previous);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+   //     textView_next=(Button)findViewById(R.id.textView_next);
+      //  textView_total=(Button)findViewById(R.id.textView_total);
+     //   textView_previous=(Button)findViewById(R.id.textView_previous);
+      //  RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recycler_view_movie.setHasFixedSize(true);
         recycler_view_movie.setItemViewCacheSize(20);
         recycler_view_movie.setDrawingCacheEnabled(true);
@@ -77,8 +82,20 @@ public class MainActivity extends AppCompatActivity {
         recycler_view_movie.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
 
         recycler_view_movie.setItemAnimator(new DefaultItemAnimator());
-        getMoviesList(Searchedcurrentpage);
 
+        getMoviesList(Searchedcurrentpage);
+        stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                page=page+Searchedcurrentpage;
+                getMoviesList(page);
+            }
+        };
 
         swipe_id.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
 
@@ -88,34 +105,53 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if(Searchedcurrentpage==1){
-            textView_previous.setVisibility(View.GONE);
-        }else{
-            textView_previous.setVisibility(View.VISIBLE);
-        }
-        textView_previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Searchedcurrentpage--;
-                getMoviesList(Searchedcurrentpage);
-            }
-        });
-        textView_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Searchedcurrentpage++;
-                getMoviesList(Searchedcurrentpage);
-            }
-        });
+//        if(Searchedcurrentpage==1){
+//            textView_previous.setVisibility(View.GONE);
+//        }else{
+//            textView_previous.setVisibility(View.VISIBLE);
+//        }
+//        textView_previous.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Searchedcurrentpage--;
+//                getMoviesList(Searchedcurrentpage);
+//            }
+//        });
+//        textView_next.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Searchedcurrentpage++;
+//                getMoviesList(Searchedcurrentpage);
+//            }
+//        });
         image_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
+        image_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent=new Intent(MainActivity.this,SearchViewActivity.class);
+                intent.putExtra("query",query);
+                startActivity(intent);
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+             //   queryText(newText);
+                return true;
+            }
+        });
+        recycler_view_movie.addOnScrollListener(scrollListener);
+        adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
+
+        recycler_view_movie.setAdapter(adapter);
 
     }
+
 
 
     private void showDialog(){
@@ -156,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMoviesList(int page) {
+        Log.d("Page No : ",""+page);
         showDialog();
         POJOInterface apiService=
                 ApiClient.getRetrofit().create(POJOInterface.class);
@@ -166,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
                 dismissDialog();
                 swipe_id.setRefreshing(false);
-                if(Searchedcurrentpage==1){
-                    textView_previous.setVisibility(View.GONE);
-                }else{
-                    textView_previous.setVisibility(View.VISIBLE);
-                }
-               movieList.clear();
+//                if(Searchedcurrentpage==1){
+//                    textView_previous.setVisibility(View.GONE);
+//                }else{
+//                    textView_previous.setVisibility(View.VISIBLE);
+//                }
+              // movieList.clear();
                     try{
                         String returned_response=new Gson().toJson(response.body());
                         String status=response.body().getStatus();
@@ -195,14 +232,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
                             String centeredText=pageNumber+" of "+finalbalanceMovie;
-                            textView_total.setText(centeredText);
+                         //   textView_total.setText(centeredText);
                             List<Movie> mov=response.body().getData().getMovies();
-                            movieList=mov;
-                            adapter=new MovieListAdapter(MainActivity.this,movieList,recycler_view_movie);
-                            stmanager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-                            GridLayoutManager mGridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                            movieList.addAll(mov);
 
-                            recycler_view_movie.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             Log.d("Movie : ","Movie size : "+movieList.size());
                             adapter.setOnLoadMoreListerner(new MovieListAdapter.OnLoadMoreListener() {
