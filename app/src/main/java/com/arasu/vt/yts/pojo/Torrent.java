@@ -26,7 +26,7 @@ public class Torrent {
     private String size;
     @SerializedName("size_bytes")
     @Expose
-    private Integer sizeBytes;
+    private Double sizeBytes;
     @SerializedName("download_count")
     @Expose
     private String downloadCount;
@@ -85,11 +85,11 @@ public class Torrent {
         this.size = size;
     }
 
-    public Integer getSizeBytes() {
+    public Double getSizeBytes() {
         return sizeBytes;
     }
 
-    public void setSizeBytes(Integer sizeBytes) {
+    public void setSizeBytes(Double sizeBytes) {
         this.sizeBytes = sizeBytes;
     }
 
