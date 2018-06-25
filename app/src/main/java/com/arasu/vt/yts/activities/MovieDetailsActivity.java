@@ -8,9 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -42,7 +39,6 @@ import com.arasu.vt.yts.pojo.Torrent;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -222,31 +218,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MovieDetailResponse> call, final Response<MovieDetailResponse> response) {
                 dismissDialog();
+                Log.d("YTSDET : : ", new Gson().toJson(response.body()));
                 final String status=response.body().getStatus();
                 String statusMessage=response.body().getStatusMessage();
                 if(status.equals("ok")){
                     castList.clear();
-                    String medium_picture=response.body().getData().getMediumCoverImage();
+                    String medium_picture=response.body().getData().getMovie().getMediumCoverImage();
 
                     if(medium_picture!=null){
-                        Picasso.with(MovieDetailsActivity.this).load(medium_picture).into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                movie_poster.setBackground(new BitmapDrawable(bitmap));
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
+                        Picasso.get().load(medium_picture).into(movie_poster);
                     }
-                    final String imdbCode=response.body().getData().getImdbCode();
+                    final String imdbCode=response.body().getData().getMovie().getImdbCode();
                     imdb_chrome.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -254,13 +236,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                         }
                     });
-                    String title=response.body().getData().getTitle();
+                    String title=response.body().getData().getMovie().getTitle();
                     movieTitle=title;
                     if(title!=null){
                         movie_title.setText(title);
 
                     }
-                    String background_image=response.body().getData().getBackgroundImage();
+                    String background_image=response.body().getData().getMovie().getBackgroundImage();
                     if(background_image!=null){
                        // background_image=background_image.replace("https://yts.ag",ApiClient.BASE_URL);
 
@@ -281,46 +263,49 @@ public class MovieDetailsActivity extends AppCompatActivity {
 //                            }
 //                        });
                     }
-                    String year=response.body().getData().getYear();
+                    String year=response.body().getData().getMovie().getYear();
                     String years=String.valueOf(year);
                     if(years!=null){
                         movie_year.setText(years);
                     }
-                    List<String>genres=response.body().getData().getGenres();
-                    StringBuilder builder = new StringBuilder();
-                    for(int i=0; i<genres.size();i++){
-                        int finalsize=i+1;
-                        String value=genres.get(i)+" / ";
-                        if(genres.size()==finalsize){
-                            value=genres.get(i);
+                    List<String>genres=response.body().getData().getMovie().getGenres();
+                    if (genres != null) {
+                        StringBuilder builder = new StringBuilder();
+                        for(int i=0; i<genres.size();i++){
+                            int finalsize=i+1;
+                            String value=genres.get(i)+" / ";
+                            if(genres.size()==finalsize){
+                                value=genres.get(i);
+                            }
+                            builder.append(value );
                         }
-                        builder.append(value );
+                        movie_genres.setText(builder.toString());
                     }
-                    movie_genres.setText(builder.toString());
 
-                    String movieLikes=response.body().getData().getLikeCount();
+
+                    String movieLikes=response.body().getData().getMovie().getLikeCount();
                     String likes=String.valueOf(movieLikes);
                     if(likes!=null){
                         movie_likes.setText(likes);
                     }
-                    String imdb=response.body().getData().getRating();
+                    String imdb=response.body().getData().getMovie().getRating();
                     String imdbString=String.valueOf(imdb);
                     if(imdbString!=null){
                         movie_imdb.setText(imdbString);
                     }
-                    String movieDescription=response.body().getData().getDescriptionFull();
+                    String movieDescription=response.body().getData().getMovie().getDescriptionFull();
                     if(movieDescription!=null){
                         movie_description.setText(movieDescription);
                     }
-                    String movieDownloadedTimes=response.body().getData().getDownloadCount();
+                    String movieDownloadedTimes=response.body().getData().getMovie().getDownloadCount();
                     String value="Downloaded "+movieDownloadedTimes+" times";
                     movie_downloaded_times.setText(value);
-                    String uploaded=response.body().getData().getDateUploaded();
+                    String uploaded=response.body().getData().getMovie().getDateUploaded();
                     if(uploaded!=null){
                         movie_upload_date.setText(uploaded);
 
                     }
-                    castList=response.body().getData().getCast();
+                    castList=response.body().getData().getMovie().getCast();
                     if(castList!=null && castList.size()!=0){
                         adapter=new CastAdapter(MovieDetailsActivity.this,castList);
                         LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
@@ -332,12 +317,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Cast size is zero! ",Toast.LENGTH_SHORT).show();
 
                     }
-                    String  medium_screenshot_1=response.body().getData().getMediumScreenshot1Image();
-                    String medium_screenshot_2=response.body().getData().getMediumScreenshot2Image();
-                    String medium_screenshot_3=response.body().getData().getMediumScreenshot3Image();
-                    String large_screenshot_1=response.body().getData().getLargeScreenshot1Image();
-                    String large_screenshot_2=response.body().getData().getLargeScreenshot2Image();
-                    String large_screenshot_3=response.body().getData().getLargeScreenshot3Image();
+                    String  medium_screenshot_1=response.body().getData().getMovie().getMediumScreenshot1Image();
+                    String medium_screenshot_2=response.body().getData().getMovie().getMediumScreenshot2Image();
+                    String medium_screenshot_3=response.body().getData().getMovie().getMediumScreenshot3Image();
+                    String large_screenshot_1=response.body().getData().getMovie().getLargeScreenshot1Image();
+                    String large_screenshot_2=response.body().getData().getMovie().getLargeScreenshot2Image();
+                    String large_screenshot_3=response.body().getData().getMovie().getLargeScreenshot3Image();
                     ArrayList<String>largePictuelist=new ArrayList<String>();
                     largePictuelist.add(0,large_screenshot_1);
                     largePictuelist.add(1,large_screenshot_2);
@@ -349,18 +334,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
                     if(medium_screenshot_1!=null){
-                        medium_screenshot_1=medium_screenshot_1.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
 
-                        Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_1).into(medium_image_1);
+                        Picasso.get().load(medium_screenshot_1).into(medium_image_1);
                     }
                     if(medium_screenshot_2!=null){
-                        medium_screenshot_2=medium_screenshot_2.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
 
-                        Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_2).into(medium_image_2);
+                        Picasso.get().load(medium_screenshot_2).into(medium_image_2);
                     } if(medium_screenshot_3!=null){
-                        medium_screenshot_3=medium_screenshot_3.replace("https://yts.ag",ApiClient.CONSTANT_IMAGE_URL);
 
-                        Picasso.with(MovieDetailsActivity.this).load(medium_screenshot_3).into(medium_image_3);
+                        Picasso.get().load(medium_screenshot_3).into(medium_image_3);
                     }
                         medium_image_1.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -383,10 +365,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                    final String youtubeThumbnail=response.body().getData().getYtTrailerCode();
+                    final String youtubeThumbnail=response.body().getData().getMovie().getYtTrailerCode();
                     if(youtubeThumbnail!=null){
                         String finalvalue="https://img.youtube.com/vi/"+youtubeThumbnail+"/hqdefault.jpg";
-                        Picasso.with(MovieDetailsActivity.this).load(finalvalue).into(thumbnail_youtube);
+                        Picasso.get().load(finalvalue).into(thumbnail_youtube);
                     }
                     thumbnail_youtube.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -400,25 +382,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }
                     });
                     Bundle bundle= new Bundle();
-                    List<Torrent>torrentzList=response.body().getData().getTorrents();
+                    List<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
 
                         Gson gson=new Gson();
                         String torrentzString=gson.toJson(torrentzList);
                         Log.d("torrentz: ",""+torrentzString);
                     FragmentModel.getHolder().setTorrentZlist(torrentzString);
-                    String language=response.body().getData().getLanguage();
+                    String language=response.body().getData().getMovie().getLanguage();
                     FragmentModel.getHolder().setLanguage(language);
-                    String mpa_rating=response.body().getData().getMpaRating();
+                    String mpa_rating=response.body().getData().getMovie().getMpaRating();
                     FragmentModel.getHolder().setMpa_rating(mpa_rating);
-                    String runtime=response.body().getData().getRuntime();
+                    String runtime=response.body().getData().getMovie().getRuntime();
                     FragmentModel.getHolder().setRuntime(runtime);
                     button_720p.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            List<Torrent>torrentzList=response.body().getData().getTorrents();
+                            List<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
                             if(torrentzList!=null &&torrentzList.size()!=0){
                                 String url=torrentzList.get(0).getUrl();
-                                download720p(url,response.body().getData().getTitle(),720);
+                                download720p(url,response.body().getData().getMovie().getTitle(),720);
 
                             }
 
@@ -429,10 +411,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     button_1080p.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            List<Torrent>torrentzList=response.body().getData().getTorrents();
+                            List<Torrent>torrentzList=response.body().getData().getMovie().getTorrents();
                             if(torrentzList!=null &&torrentzList.size()!=0){
                                 String url=torrentzList.get(1).getUrl();
-                                download720p(url,response.body().getData().getTitle(),1080);
+                                download720p(url,response.body().getData().getMovie().getTitle(),1080);
 
                             }
                         }
@@ -468,7 +450,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MovieDetailResponse> call, Throwable t) {
                 dismissDialog();
-                Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"" + t.getMessage(),Toast.LENGTH_SHORT).show();
 
                 try{
                     Log.e("Error: ",""+t.getMessage());

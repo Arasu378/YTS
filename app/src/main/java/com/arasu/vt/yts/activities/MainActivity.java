@@ -4,21 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +26,7 @@ import com.arasu.vt.yts.clients.EndlessRecyclerViewScrollListener;
 import com.arasu.vt.yts.interfaces.POJOInterface;
 import com.arasu.vt.yts.model.ScrollListenerMovies;
 import com.arasu.vt.yts.pojo.Movie;
-import com.arasu.vt.yts.pojo.Movy;
 import com.arasu.vt.yts.pojo.RootObject;
-import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
-import com.google.android.gms.common.api.Api;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -200,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<RootObject>() {
             @Override
             public void onResponse(Call<RootObject> call, Response<RootObject> response) {
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
                 dismissDialog();
                 swipe_id.setRefreshing(false);
 //                if(Searchedcurrentpage==1){
@@ -215,12 +208,12 @@ public class MainActivity extends AppCompatActivity {
                         String status_message=response.body().getStatusMessage();
                         if(status.equals("ok")){
                             Log.d("value : ",""+returned_response);
-                            String tMvo=String.valueOf(response.body().getData().getMovieCount());
+                            String tMvo=String.valueOf(response.body().getData().getMovie_count());
                             tMvo=tMvo.substring(0,tMvo.length()-2);
                             String text=tMvo+" YIFY Movies Found";
                             total_movie_list.setText(text);
-                            double totalmovie=response.body().getData().getMovieCount();
-                            String pageNumber=String .valueOf(response.body().getData().getPageNumber());
+                            double totalmovie=response.body().getData().getMovie_count();
+                            String pageNumber=String .valueOf(response.body().getData().getPage_number());
                             Log.d("PageNumber : ",pageNumber);
                             double balanceMovie=totalmovie/20;
                             String finalbalanceMovie=String.valueOf(balanceMovie);
@@ -233,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                             finalbalanceMovie=finalbalanceMovie.substring(0,finalbalanceMovie.length()-2);
                             String centeredText=pageNumber+" of "+finalbalanceMovie;
                          //   textView_total.setText(centeredText);
-                            List<Movie> mov=response.body().getData().getMovies();
+                            ArrayList<Movie> mov=response.body().getData().getMovies();
                             movieList.addAll(mov);
 
                             adapter.notifyDataSetChanged();
@@ -266,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<RootObject> call, Throwable t) {
                 swipe_id.setRefreshing(false);
 dismissDialog();
-                Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"" + t.getMessage(),Toast.LENGTH_SHORT).show();
                 try{
                     Log.e("Error: ","arasu YTS : "+t.getMessage());
                     t.getMessage();

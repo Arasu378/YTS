@@ -119,7 +119,7 @@ public class SearchViewActivity extends AppCompatActivity {
                 dismissDialog();
                 swipe_id_search.setRefreshing(false);
                // movieList.clear();
-                List<Movie> mov=response.body().getData().getMovies();
+                List<Movie> mov=response.body().getData().getMovie().getMovies();
                 if(mov!=null&&mov.size()!=0){
                     movieList.addAll(mov);
 

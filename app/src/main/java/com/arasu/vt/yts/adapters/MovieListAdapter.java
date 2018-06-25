@@ -2,9 +2,6 @@ package com.arasu.vt.yts.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +16,8 @@ import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.activities.MovieDetailsActivity;
 import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.pojo.Movie;
-import com.arasu.vt.yts.pojo.Movy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,25 +84,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
         final double movieId=movy.getId();
 
         if(pictureURL!=null){
-            pictureURL=pictureURL.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
-            Picasso.with(mContext).load(pictureURL).into(new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    holder.image_movie.setBackground(new BitmapDrawable(bitmap) );
-
-
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                }
-            });
+            pictureURL=pictureURL.replace("https://yts.am", ApiClient.CONSTANT_IMAGE_URL);
+            Picasso.get().load(pictureURL).into(holder.image_movie);
         }
         if(title!=null){
             holder.title_movie.setText(title);

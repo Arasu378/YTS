@@ -3,12 +3,11 @@ package com.arasu.vt.yts.activities;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -81,9 +80,9 @@ public class MovieSuggesstionsActivity extends AppCompatActivity {
                 String status=response.body().getStatus();
                 String status_message=response.body().getStatusMessage();
                 if(status.equals("ok")){
-                    int movie_suggesstions_count=response.body().getData().getMovie_suggestions_count();
+                    long movie_suggesstions_count=response.body().getData().getMovie_count();
                     if(movie_suggesstions_count!=0){
-                        movieList=response.body().getData().getMovie_suggestions() ;
+                        movieList=response.body().getData().getMovies() ;
                         adapter=new MovieListAdapter(MovieSuggesstionsActivity.this,movieList,movie_suggestion_recycler);
                         movie_suggestion_recycler.setAdapter(adapter);
                         adapter.notifyDataSetChanged();

@@ -62,7 +62,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
         if(image!=null){
             //image=image.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
 
-            Picasso.with(mContext).load(image).into(holder.cast_image);
+            Picasso.get().load(image).into(holder.cast_image);
         }
         holder.linear_click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +84,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
     }
     private void openImdb(String imdbI){
         if(imdbI!=null){
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/name/"+imdbI));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.imdb.com/name/nm"+imdbI));
             mContext.startActivity(browserIntent);
         }else{
             Toast.makeText(mContext,"No pages in IMDB.",Toast.LENGTH_SHORT).show();

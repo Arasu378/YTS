@@ -1,6 +1,5 @@
 package com.arasu.vt.yts.activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.adapters.ParentalAdapter;
 import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.interfaces.POJOInterface;
-import com.arasu.vt.yts.pojo.Data;
 import com.arasu.vt.yts.pojo.ParentalGuides;
 import com.arasu.vt.yts.pojo.ParentalResponse;
 
@@ -79,7 +77,7 @@ public class ParentalGuideActivity extends AppCompatActivity {
                 String status=response.body().getStatus();
                 String status_message=response.body().getStatusMessage();
                 if(status.equals("ok")){
-                     int  parental_guide_count=response.body().getData().getParental_guide_count();
+                     long  parental_guide_count=response.body().getData().getParental_guide_count();
                     if(parental_guide_count!=0){
                         parentalGuidesList=response.body().getData().getParental_guides();
                         adapter=new ParentalAdapter(ParentalGuideActivity.this,parentalGuidesList);

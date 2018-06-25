@@ -11,6 +11,9 @@ public class ParentalResponse {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("parental_guide_count")
+    @Expose
+    private Long parental_guide_count;
     @SerializedName("status_message")
     @Expose
     private String statusMessage;
@@ -20,6 +23,14 @@ public class ParentalResponse {
     @SerializedName("@meta")
     @Expose
     private Meta meta;
+
+    public Long getParental_guide_count() {
+        return parental_guide_count;
+    }
+
+    public void setParental_guide_count(Long parental_guide_count) {
+        this.parental_guide_count = parental_guide_count;
+    }
 
     public String getStatus() {
         return status;

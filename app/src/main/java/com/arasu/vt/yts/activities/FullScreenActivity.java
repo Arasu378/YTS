@@ -2,32 +2,25 @@ package com.arasu.vt.yts.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arasu.vt.yts.R;
 import com.arasu.vt.yts.clients.ApiClient;
 import com.arasu.vt.yts.model.FragmentModel;
-import com.arasu.vt.yts.pojo.Torrent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
@@ -126,23 +119,8 @@ public class FullScreenActivity extends AppCompatActivity {
             final ImageViewTouch imgDisplay=(ImageViewTouch)view.findViewById(R.id.imgDisplay);
             String picUrl=listPicture.get(position);
             if(picUrl!=null){
-                picUrl=picUrl.replace("https://yts.ag", ApiClient.CONSTANT_IMAGE_URL);
-                showProgressDialog();
-                Picasso.with(getApplicationContext()).load(picUrl).into(imgDisplay, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(mContext,"Success!",Toast.LENGTH_SHORT).show();
-                       dismissProgressDialog();
-
-                    }
-
-                    @Override
-                    public void onError() {
-                        Toast.makeText(mContext,"failure!",Toast.LENGTH_SHORT).show();
-                        dismissProgressDialog();
-
-                    }
-                });
+                picUrl=picUrl.replace("https://yts.am", ApiClient.CONSTANT_IMAGE_URL);
+                Picasso.get().load(picUrl).into(imgDisplay);
                 Log.d("URL","url picture : "+picUrl);
             }
 
